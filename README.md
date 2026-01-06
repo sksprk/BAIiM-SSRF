@@ -43,7 +43,7 @@
 <details>
     <summary>Podpowiedź nr 2</summary>
 
-    Po zmianie parametru stockApi na http://localhost lub http://127.0.0.1 żądanie jest blokowane. Są to wspomniane w zadaniu słabe zabezpieczenia przed SSRF. Na jakiej zasadzie mogą działać? Czy podane adresy to jedyne możliwe odwołania do pętli zwrotnej?
+    Po zmianie parametru "stockApi" na http://localhost lub http://127.0.0.1 żądanie jest blokowane. Są to wspomniane w zadaniu słabe zabezpieczenia przed SSRF. Na jakiej zasadzie mogą działać? Czy istnieją alternatywne reprezentacje adresu pętli zwrotnej lub inne nazwy hostów wskazujące na ten sam serwer?
 </details>
 <details>
     <summary>Podpowiedź nr 3</summary>
@@ -61,10 +61,33 @@
 <details>
     <summary>Podpowiedź nr 2</summary>
 
-    Na stronie produktu kliknij "Next product" w prawym dolnym rogu. Przeanalizuj przekazane żądania. Jakie parametry są przekazywane w tych żądaniach? Czy możemy je w jakiś sposób wykorzystać do ataku SSRF?
+    Na stronie produktu kliknij "Next product" w prawym dolnym rogu. Przeanalizuj przekazane żądania. Jakie parametry są przekazywane w tych żądaniach? Czy możemy je w jakiś sposób wykorzystać do ataku SSRF? Zwróć uwagę, czy paramter "path" przyjmuje tylko relatywne ścieżki, czy może pełne adresy URL?
 </details>
 <details>
     <summary>Podpowiedź nr 3</summary>
 
     Porównaj konstrukcję parametru "stockApi" z "check stock feature" i parametr "path" w żądaniu na /product/nextProduct?path=[...]. Jak można to wykorzystać, aby uzyskać dostęp do admin panelu?
+</details>
+
+---
+### [Lab nr 4](https://portswigger.net/web-security/ssrf/lab-ssrf-with-whitelist-filter)
+<details>
+    <summary>Podpowiedź nr 1</summary>
+
+    Przeanalizuj przechwycone żądania w Burpie, zgodnie z instrukcją do laboratorium. Podobnie jak w Lab nr 2 żądania z parametrem "stockApi" ustawionym na http://127.0.0.1 lub http://localhost są blokowane. Jaka jest odpowiedź serwera na takie żądania? Co ujawnia nam ten komunikat?
+</details>
+<details>
+    <summary>Podpowiedź nr 2</summary>
+
+    URL-embedded credentials, działanie znaku # w adresie URL i URL double encoding (patrz Lab nr 2)
+</details>
+<details>
+    <summary>Podpowiedź nr 3</summary>
+
+    Whitelista często sprawdza tylko, czy wymagana fraza znajduje się wewnątrz URL lub czy żądanie kierowane jest na odpowiedni adres. Spróbuj skonstruować adres tak, aby nasza domena "localhost" była traktowana jako nazwa użytkownika (używając http://username:password@host lub http://username@host), podczas gdy faktycznym celem żądania będzie localhost.
+</details>
+<details>
+    <summary>Podpowiedź nr 4</summary>
+
+    Nawet przy użyciu składni z @, serwer może odrzucić znaki, które próbujesz wstawić przed nią. Kluczowe staje się wstawienie znaku # (znacznik początku fragmentu/kotwica) po którym ignorowana jest reszta URL (aż do znaku "/"). Jak sprawić, aby znak ten przetrwał pierwszą walidację i dotarł do końcowego parsera wykonującego żądanie?
 </details>
