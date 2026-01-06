@@ -84,10 +84,10 @@
 <details>
     <summary>Podpowiedź nr 3</summary>
 
-    Whitelista często sprawdza tylko, czy wymagana fraza znajduje się wewnątrz URL lub czy żądanie kierowane jest na odpowiedni adres. Spróbuj skonstruować adres tak, aby nasza domena "localhost" była traktowana jako nazwa użytkownika (używając http://username:password@host lub http://username@host), podczas gdy faktycznym celem żądania będzie localhost.
+    Whitelista wymaga, aby w adresie pojawiła się domena "stock.weliketoshop.net". Spróbuj skonstruować URL tak, aby to "localhost" był hostem (celem żądania), a wymagana przez filtr domena znalazła się w sekcji danych uwierzytelniających (np. http://localhost@wymagana_domena) lub została w inny sposób "doklejona" do adresu. Sprawdź, jak parser interpretuje taki adres - czy łączy się z localhostem, czy z domeną po znaku @?
 </details>
 <details>
     <summary>Podpowiedź nr 4</summary>
 
-    Nawet przy użyciu składni z @, serwer może odrzucić znaki, które próbujesz wstawić przed nią. Kluczowe staje się wstawienie znaku # (znacznik początku fragmentu/kotwica) po którym ignorowana jest reszta URL (aż do znaku "/"). Jak sprawić, aby znak ten przetrwał pierwszą walidację i dotarł do końcowego parsera wykonującego żądanie?
+    Samo użycie @ może sprawić, że serwer połączy się z domeną po prawej stronie tego znaku, a nie z localhostem. Musimy "uciąć" adres przed @. Tu z pomocą przychodzi znak # (kotwica/fragment), po którym reszta adresu jest zazwyczaj ignorowana przez serwer wykonujący żądanie. Problem w tym, że filtr może odrzucić jawny znak #. Jak możemy go zakodować, aby przetrwał weryfikację whitelisty i został zinterpretowany jako # dopiero w momencie wykonywania żądania HTTP? (Pamiętaj o URL-encoding).
 </details>
